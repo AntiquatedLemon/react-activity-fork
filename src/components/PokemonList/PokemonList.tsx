@@ -40,7 +40,7 @@ export default function PokemonList() {
         //Axios is going to grab the information from the pokeAPI and store it
         
         axios.get<PokemonAPI>(`https://pokeapi.co/api/v2/pokemon/${newPokemon.name}`)
-        .then(response => {
+        .then((response:any) => {
             console.log(response.data);
             let poke:Pokemon = {
                 health: response.data.stats[0].base_stat,
@@ -56,8 +56,12 @@ export default function PokemonList() {
       }
 
       function setNameP(event: React.ChangeEvent<HTMLInputElement>){
-        
         newPokemon.name = event.target.value;
+      }
+
+      
+      function handleDelete(name:string){
+        setListPoke(listOfPokemons.filter((poke) => poke.name !== name))
       }
 
     return  (
@@ -70,12 +74,11 @@ export default function PokemonList() {
             <input type="submit"></input>
         </form>
 
-
         <h2>Pokemon List</h2>
         <div className="grid-pokemon">
             {
-                listOfPokemons.map(poke => {
-                    return <PokemonBox key={poke.name} {...poke} />
+                listOfPokemons.map((poke) => {
+                  return <PokemonBox key={poke.name} {...poke} onDelete={() => handleDelete(poke.name)} />
                 })
             }
         </div>
